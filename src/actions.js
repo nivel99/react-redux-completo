@@ -34,3 +34,29 @@ export const fetchProductos = () => async (dispatch) => {
     }
   };
   
+  export const login = (username, password) => async (dispatch) => {
+    try {
+      const response = await fetch('http://localhost/apiRedux/login.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `username=${username}&password=${password}`,
+      });
+  
+      if (response.ok) {
+        const userData = await response.json();
+        dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+      } else {
+        const errorData = await response.text();
+        dispatch({ type: 'LOGIN_FAILURE', payload: errorData });
+      }
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
+    }
+  };
+  
+  export const logout = () => (dispatch) => {
+    // Puedes agregar lógica de cierre de sesión aquí si es necesario
+    dispatch({ type: 'LOGOUT' });
+  };
